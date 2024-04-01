@@ -44,7 +44,6 @@ def operateHex(color, val):
 
 
 def addEdges(graph, fileObj, selectedPath, showAllEdges):
-
     edge_width = []
     default_width = 0.4
     redColor = '#ff0000'
@@ -55,19 +54,13 @@ def addEdges(graph, fileObj, selectedPath, showAllEdges):
 
     for i in range(len(fileObj.graph)):
         for j in range(i + 1, len(fileObj.graph)):
-
             if [i, j] in selectedPath or [j, i] in selectedPath:
                 edge_width.append(default_width * 1.5)
-                graph.add_edge(
-                    i, j, weight=fileObj.graph[i][j], color=redColor)
-
+                graph.add_edge(i, j, weight=fileObj.graph[i][j], color=redColor)
             elif fileObj.graph[i][j] != 0 and showAllEdges:
-                tempColor = "#%s%s%s%s" % (
-                    color[0], color[0], color[0], color[1])
+                tempColor = "#%s%s%s%s" % (color[0], color[0], color[0], color[1])
                 edge_width.append(default_width)
-                graph.add_edge(
-                    i, j, weight=fileObj.graph[i][j], color=tempColor)
-
+                graph.add_edge(i, j, weight=fileObj.graph[i][j], color=tempColor)
                 if not (color[0] == '80' or color[1] == '80'):
                     color[0] = operateHex(color[0], changeStep)
                     color[1] = operateHex(color[1], -changeStep)
@@ -128,13 +121,6 @@ def calculateCost(edgeList, graph, V):
 
 
 def main():
-    # graphing variables
-    fileName = "files/input100.txt"
-    algoIndex = 4
-    showAllEdges = False
-    showWeights = True
-
-    # create user input gui
     gui = Gui.Gui()
     gui.guiCreate()
     fileName = "files/" + gui.guiArray[0]
@@ -142,57 +128,32 @@ def main():
     showAllEdges = gui.guiArray[2]
     showWeights = gui.guiArray[3]
 
-    # read input file
     fileObj = File(fileName)
     fileObj.readFile()
 
-    # apply algo
     algoObj = importAlgo(algoIndex)
-    selectedPath = algoObj.runAlgorithm(
-        fileObj.graph, fileObj.nodesCount, fileObj.startNode)
+    goal_node = 17
+    
+    selectedPath = algoObj.runAlgorithm(fileObj.graph, fileObj.nodesCount, fileObj.startNode, goal_node)
+    if(algoIndex==4):
+        algoObj.printVisitedNodes(fileObj.startNode, goal_node)
+    else:
+        algoObj.printVisitedNodes()
+        #algoObj.print_path(selectedPath)
 
-    # print selected path
-    printLine()
-    print("Selected Edges:")
-    for pathI, pathJ in selectedPath:
-        print("(", pathI, "->", pathJ, ") :\t", fileObj.graph[pathI][pathJ])
-    # print(selectedPath)
-
-    printLine()
-    print("Total Edge Cost: %0.2f" % calculateCost(
-        selectedPath, fileObj.graph, fileObj.nodesCount))
-
-    # display local clustering coefficient
-    localClusterVal = clusterCoefficient(fileObj)
-    printLine()
-    print("Clustering Coefficient: %0.2f" % localClusterVal)
-
-    # plot axis
-    fig, ax = plt.subplots()
-    fig.add_subplot(111)
-    ax.axis((0, fileObj.maxXY[0], 0, fileObj.maxXY[1]))
-
-    # add nodes and edges
     G = nx.Graph()
     node_edge_color, node_edge_width = addNodes(G, fileObj)
     edge_width = addEdges(G, fileObj, selectedPath, showAllEdges)
 
-    # set position and edge variables
     pos = nx.get_node_attributes(G, 'pos')
     edges = G.edges()
     edge_color = [G[u][v]['color'] for u, v in edges]
 
-    # show edge weights if variable true
     if showWeights:
         labels = nx.get_edge_attributes(G, 'weight')
-        nx.draw_networkx_edge_labels(
-            G, pos, edge_labels=labels, font_size=6, alpha=0.4, font_weight=0.1, label_pos=0.5)
+        nx.draw_networkx_edge_labels(G, pos, edge_labels=labels, font_size=6, alpha=0.4, font_weight=0.1, label_pos=0.5)
 
-    # draw the graph with desired attributes
-    nx.draw(G, pos, with_labels=True, node_size=140, font_size=7,
-            node_color='#ccccff', linewidths=node_edge_width, edgecolors=node_edge_color, width=edge_width, edge_color=edge_color)
-
-    # display graph screen
+    nx.draw(G, pos, with_labels=True, node_size=140, font_size=7, node_color='#ccccff', linewidths=node_edge_width, edgecolors=node_edge_color, width=edge_width, edge_color=edge_color)
     plt.show()
 
 

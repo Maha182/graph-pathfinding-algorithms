@@ -7,51 +7,51 @@ class Floyd:
     cost = []
     last = []
 
-    def runAlgorithm(self, graph, V, node):
-
+    def runAlgorithm(self, graph, V, start, goal):
         self.SPT = []
-        self.cost = []
+        self.cost = [[sys.maxsize for _ in range(V)] for _ in range(V)]
+        self.last = [[-1 for _ in range(V)] for _ in range(V)]
 
-        self.last = [[-1 for i in range(V)]
-                     for j in range(V)]
-
-        self.cost = [[0 for i in range(V)] for j in range(V)]
+        # Initialize the cost and last matrices
         for i in range(V):
             for j in range(V):
                 if i == j:
                     self.cost[i][j] = 0
                 elif graph[i][j] != 0:
                     self.cost[i][j] = graph[i][j]
-                    self.last[i][j] = j
-                else:
-                    self.cost[i][j] = sys.maxsize
+                    self.last[i][j] = i  # Store the predecessor
 
+        # Floyd-Warshall algorithm to calculate shortest paths
         for k in range(V):
             for i in range(V):
                 for j in range(V):
-                    if self.cost[i][j] > self.cost[i][k] + self.cost[k][j]:
+                    if self.cost[i][k] + self.cost[k][j] < self.cost[i][j]:
                         self.cost[i][j] = self.cost[i][k] + self.cost[k][j]
-                        self.last[i][j] = self.last[i][k]
+                        self.last[i][j] = self.last[k][j]
 
-        for i in range(V):
-            for j in range(V):
-                if not (i == j or self.cost[i][j] == sys.maxsize) and i == node:
-                    path = [i]
-                    while path[-1] != j:
-                        path.append(self.last[path[-1]][j])
+        # Reconstruct the shortest path from start to goal
+        if self.cost[start][goal] == sys.maxsize:
+            print("No path from", start, "to", goal)
+            return []
+        path = self.reconstructPath(start, goal)
+        return path
 
-                    for k in range(0, len(path) - 1):
-                        if not ([path[k], path[k+1]] in self.SPT or [path[k+1], path[k]] in self.SPT):
-                            self.SPT.append([path[k], path[k+1]])
-                    """ print("%d → %d  %4d       %s"
-                          % (i + 1, j + 1, self.cost[i][j],
-                             ' → '.join(str(p) for p in path))) """
+    def reconstructPath(self, start, goal):
+        path = []
+        at = goal
+        # Reconstruct the path backwards from goal to start
+        while at != start:
+            if at == -1:
+                return []  # No path exists
+            path.append(at)
+            at = self.last[start][at]
+        path.append(start)
+        path.reverse()
 
-        # print algo info
-        self.costSum(V, node)
-        self.printAlgo(node)
+        # Convert the path to the required edge pair format
+        edgePairs = [[path[i], path[i + 1]] for i in range(len(path) - 1)]
+        return edgePairs
 
-        return self.SPT
 
     def printAlgo(self, node):
         printLine()
@@ -65,3 +65,12 @@ class Floyd:
             sum += self.cost[node][i]
         printLine()
         print("Total Cost: ", sum)
+
+    def printVisitedNodes(self, start, goal):
+        # This function prints intermediary nodes for a specific start-goal path.
+        path = self.reconstructPath(start, goal)
+        if not path:
+            print("No path from", start, "to", goal)
+            return
+        visited = {node for pair in path for node in pair}
+        print("Visited nodes (Floyd, from {} to {}):".format(start, goal), sorted(visited))
