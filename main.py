@@ -81,10 +81,10 @@ def addNodes(G, fileObj):
     for i in range(fileObj.nodesCount):
         if i == fileObj.startNode:
             node_edge_color.append('#000044')
-            node_edge_width.append('1.2')
+            node_edge_width.append(1.2)
         else:
             node_edge_color.append('#5555ff')
-            node_edge_width.append('0.8')
+            node_edge_width.append(0.8)
         G.add_node(
             i, pos=(fileObj.nodesCordinate[i][0], fileObj.nodesCordinate[i][1]))
     return node_edge_color, node_edge_width
