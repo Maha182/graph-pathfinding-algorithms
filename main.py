@@ -132,7 +132,7 @@ def main():
     fileObj.readFile()
 
     algoObj = importAlgo(algoIndex)
-    goal_node = 17
+    goal_node = 6
     
     selectedPath = algoObj.runAlgorithm(fileObj.graph, fileObj.nodesCount, fileObj.startNode, goal_node)
     if(algoIndex==4):

@@ -1,6 +1,6 @@
 import sys
 from main import printLine
-
+import time
 
 class Floyd:
     SPT = []
@@ -8,6 +8,7 @@ class Floyd:
     last = []
 
     def runAlgorithm(self, graph, V, start, goal):
+        start_time = time.time()
         self.SPT = []
         self.cost = [[sys.maxsize for _ in range(V)] for _ in range(V)]
         self.last = [[-1 for _ in range(V)] for _ in range(V)]
@@ -34,6 +35,14 @@ class Floyd:
             print("No path from", start, "to", goal)
             return []
         path = self.reconstructPath(start, goal)
+
+        if path is None:
+            print("No path found from node", start, "to node", goal)
+        else:
+            print("Shortest path from node", start, "to node", goal, "is:", path)
+        
+        end_time = time.time()
+        print("Execution time:", end_time - start_time, "seconds")
         return path
 
     def reconstructPath(self, start, goal):

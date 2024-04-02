@@ -1,12 +1,13 @@
 import sys
 from main import printLine
-
+import time
 class BellmanFord:
     SPT = []
     distance = []
     prev = []
 
     def runAlgorithm(self, graph, V, start, goal):
+        start_time = time.time()
         self.SPT = []
         self.distance = [sys.maxsize] * V
         self.prev = [None] * V
@@ -34,6 +35,10 @@ class BellmanFord:
             print("No path found from node", start, "to node", goal)
         else:
             print("Shortest path from node", start, "to node", goal, "is:", path)
+        
+        end_time = time.time()
+        print("Execution time:", end_time - start_time, "seconds")
+        
         return path
 
     def reconstructPath(self, start, goal):

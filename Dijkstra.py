@@ -1,5 +1,7 @@
 import sys
 from main import printLine
+import time
+
 
 
 class Dijkstra:
@@ -9,6 +11,7 @@ class Dijkstra:
         self.cost = []
 
     def runAlgorithm(self, graph, V, start_node, goal_node):
+        start_time = time.time()
         self.SPT = []
         self.visited = []
         self.cost = []
@@ -32,7 +35,17 @@ class Dijkstra:
 
             node = next_min[0]
         self.visited.append(node)
-        return self.reconstruct_path(start_node, goal_node)
+        path = self.reconstruct_path(start_node, goal_node)
+        if path is None:
+            print("No path found from node", start_node, "to node", goal_node)
+        else:
+            print("Shortest path from node", start_node, "to node", goal_node, "is:", path)
+                
+        
+
+        end_time = time.time()
+        print("Execution time:", end_time - start_time, "seconds")
+        return path
 
     def reconstruct_path(self, start_node, goal_node):
         path = []
@@ -51,3 +64,18 @@ class Dijkstra:
 
     def printVisitedNodes(self):
         print("Visited nodes (Dijkstra):", self.visited)
+
+    def printAlgo(self, start_node, goal_node):
+    # Print the total cost from start to goal
+        total_cost = self.cost[goal_node][0]
+        if total_cost == sys.maxsize:
+            print("No reachable path from node", start_node, "to node", goal_node)
+        else:
+            print("Total cost from node", start_node, "to node", goal_node, "is:", total_cost)
+
+    def costSum(self):
+        sum = 0
+        for i in self.cost:
+            sum += i[0]
+        printLine()
+        print("Total Cost: ", sum)
