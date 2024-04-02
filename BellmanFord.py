@@ -12,6 +12,8 @@ class BellmanFord:
         self.distance = [sys.maxsize] * V
         self.prev = [None] * V
         self.distance[start] = 0
+        operation_count = 0
+        
 
         for _ in range(V - 1):
             for i in range(V):
@@ -21,6 +23,7 @@ class BellmanFord:
                         if tempDistance < self.distance[j]:
                             self.distance[j] = tempDistance
                             self.prev[j] = i
+                            operation_count += 1
 
         # Check for negative weight cycles
         for i in range(V):
@@ -35,7 +38,8 @@ class BellmanFord:
             print("No path found from node", start, "to node", goal)
         else:
             print("Shortest path from node", start, "to node", goal, "is:", path)
-        
+            
+        print("Operation count:", operation_count)
         end_time = time.time()
         print("Execution time:", end_time - start_time, "seconds")
         

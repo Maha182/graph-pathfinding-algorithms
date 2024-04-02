@@ -16,6 +16,7 @@ class Dijkstra:
         self.visited = []
         self.cost = []
         node = start_node
+        operation_count = 0
 
         for i in range(V):
             self.cost.append([sys.maxsize, -1])
@@ -27,6 +28,7 @@ class Dijkstra:
                 if (graph[node][j] != 0) and (j not in self.visited) and (self.cost[node][0] + graph[node][j] < self.cost[j][0]):
                     self.cost[j][0] = self.cost[node][0] + graph[node][j]
                     self.cost[j][1] = node
+                    operation_count += 1
 
             next_min = [0, sys.maxsize]
             for j in range(len(self.cost)):
@@ -42,7 +44,7 @@ class Dijkstra:
             print("Shortest path from node", start_node, "to node", goal_node, "is:", path)
                 
         
-
+        print("Operation count:", operation_count)
         end_time = time.time()
         print("Execution time:", end_time - start_time, "seconds")
         return path

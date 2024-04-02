@@ -12,7 +12,7 @@ class Floyd:
         self.SPT = []
         self.cost = [[sys.maxsize for _ in range(V)] for _ in range(V)]
         self.last = [[-1 for _ in range(V)] for _ in range(V)]
-
+        operation_count = 0
         # Initialize the cost and last matrices
         for i in range(V):
             for j in range(V):
@@ -29,6 +29,7 @@ class Floyd:
                     if self.cost[i][k] + self.cost[k][j] < self.cost[i][j]:
                         self.cost[i][j] = self.cost[i][k] + self.cost[k][j]
                         self.last[i][j] = self.last[k][j]
+                        operation_count += 1
 
         # Reconstruct the shortest path from start to goal
         if self.cost[start][goal] == sys.maxsize:
@@ -41,6 +42,7 @@ class Floyd:
         else:
             print("Shortest path from node", start, "to node", goal, "is:", path)
         
+        print("Operation count:", operation_count)
         end_time = time.time()
         print("Execution time:", end_time - start_time, "seconds")
         return path
