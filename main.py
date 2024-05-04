@@ -11,23 +11,17 @@ def printLine():
 
 
 def importAlgo(algoChoose):
-    algoList = ["Prims", "Kruskal", "Dijkstra", "Bellman Ford", "Floyd"]
+    algoList = ["Dijkstra", "Bellman Ford", "Floyd"]
     algoObj = None
     printLine()
     print("Algo Used: ", algoList[algoChoose])
     if algoChoose == 0:
-        import Prims as algo
-        algoObj = algo.Prims()
-    elif algoChoose == 1:
-        import Kruskal as algo
-        algoObj = algo.Kruskal()
-    elif algoChoose == 2:
         import Dijkstra as algo
         algoObj = algo.Dijkstra()
-    elif algoChoose == 3:
+    elif algoChoose == 1:
         import BellmanFord as algo
         algoObj = algo.BellmanFord()
-    elif algoChoose == 4:
+    elif algoChoose == 2:
         import Floyd as algo
         algoObj = algo.Floyd()
     else:
@@ -135,7 +129,7 @@ def main():
     goal_node = 6
     
     selectedPath = algoObj.runAlgorithm(fileObj.graph, fileObj.nodesCount, fileObj.startNode, goal_node)
-    if(algoIndex==4):
+    if(algoIndex==2):
         algoObj.printVisitedNodes(fileObj.startNode, goal_node)
     else:
         algoObj.printVisitedNodes()

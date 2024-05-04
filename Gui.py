@@ -27,7 +27,7 @@ class Gui:
         label = tk.Label(window, text='Algorithm')
         label.place(x=65, y=85)
 
-        opt = ["MST (Prims)", "MST (Kruskal)", "SPT (Dijkstra)",
+        opt = ["SPT (Dijkstra)",
                "SPT (Bellman Ford)", "SPT (Floyd)"]
         varDrop = tk.StringVar(window)
         varDrop.set(opt[0])
